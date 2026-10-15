@@ -20,10 +20,11 @@ No filesystem upload step. `data/style.css`, `manifest.json` and `icon.svg` are
 embedded into the firmware at build time. LittleFS is formatted on first boot and
 holds only `sessions.csv` and `settings.json`.
 
-Board target: `esp32-s3-devkitm-1`. The team chose path B (bare
-ESP32-S3-MINI-1-N8 soldered to the shield); the DevKitM-1 is the same module,
-so the build target and pins are identical. Flashing and the debug log go over
-the module's native USB (GPIO19/20) through the USB-C connector on the shield.
+Board target: `esp32-s3-devkitm-1`. The shield is laid out for both a plug-in
+DevKitM-1 and a bare ESP32-S3-MINI-1-N8 (same module), so the build target and
+pins are identical either way. Flashing and the debug log go over the module's
+native USB (GPIO19/20): the DevKit's port labelled **USB**, or the USB-C
+connector on the shield for the bare module.
 First flash: hold BOOT, tap RESET, release BOOT, then `pio run -t upload`.
 After that esptool resets the board itself.
 

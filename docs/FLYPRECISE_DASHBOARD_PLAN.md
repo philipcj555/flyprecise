@@ -47,7 +47,7 @@ Spec for the ESP32-hosted dashboard. Written for Claude Code to build from. Repo
 
 ### 4.1 Module vs dev board
 
-Decide this first. Two paths. **Team decision Oct 15: path B.**
+Decide this first. Two paths. **Team decision Oct 15: lay out both on the shield, populate one (see docs/plan_review.md 1b).**
 
 - **A. ESP32-S3-DevKitM-1** (dev board that carries the MINI-1). Has its own 3.3 V regulator, USB-C, and headers. Easiest for Nov. Mount it off the shield with a 4-pin header (5V, GND, TX, RX). Recommended for this semester.
 - **B. Bare ESP32-S3-MINI-1 soldered to the shield.** Cleaner final product but needs: 3.3 V LDO, boot/reset buttons or pads, USB-C connector or a 6-pin programming header, and reflow or careful hand soldering of the castellated module. Only do this if someone on the team has done castellated modules before and the PCB isn't already late.
