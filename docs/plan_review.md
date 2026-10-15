@@ -19,6 +19,40 @@ then only pull the line LOW, the pull-up or the 16U2 provides HIGH, and
 uploads never fight the ESP32. Keep the cuttable jumper in series as the plan
 already says.
 
+## 1b. Path B chosen (bare module on the shield): what the shield must carry (PCB)
+
+Decision Oct 15: the ESP32-S3-MINI-1-N8 goes directly on the shield (plan
+section 4.1 path B). Firmware is unchanged (the DevKitM-1 is the same module),
+but the shield now has to provide everything the DevKit did:
+
+1. **3.3 V regulator** from the 5 V rail, rated 600 mA or more with headroom
+   for Wi-Fi bursts: AP2112K-3.3 or AP7361-33 preferred (low dropout), AMS1117-3.3
+   acceptable. 10 uF ceramic in and out, plus 100 nF right at the module's 3V3 pin
+   and 22 uF bulk nearby.
+2. **EN (CHIP_PU)**: 10 kΩ pull-up to 3.3 V, 1 uF to GND, and a RESET push button
+   to GND. Without the RC the module may not start cleanly on power-up.
+3. **GPIO0 BOOT button** to GND (internal pull-up is enough). Needed to enter
+   the bootloader the first time and whenever a bad flash bricks the USB stack.
+4. **USB-C receptacle for programming**: D- to GPIO19, D+ to GPIO20, 5.1 kΩ from
+   each CC pin to GND (so a C-to-C cable supplies power), VBUS may also feed the
+   5 V rail through a Schottky diode so the board can run from the laptop alone.
+   No USB-serial chip is needed; the S3 flashes over its native USB.
+   Alternative: a 6-pin header (3V3, GND, EN, GPIO0, U0TXD GPIO43, U0RXD GPIO44)
+   for an external USB-serial adapter. Do the USB-C; it is one connector.
+5. **Strapping pins**: leave GPIO0, GPIO3, GPIO45, GPIO46 unconnected or on
+   buttons only. GPIO17/18 (UART to the Uno) are safe.
+6. **Antenna keep-out**: the module's PCB antenna end must hang over the board
+   edge or sit over a copper-free zone per the Espressif datasheet (no copper
+   under or within ~15 mm around it on any layer). Mounting the module in the
+   middle of a ground pour kills the Wi-Fi range.
+7. **Footprint**: ESP32-S3-MINI-1 castellated, 65 pads, 1.27 mm pitch, with a
+   large thermal/ground pad underneath. KiCad has it in `RF_Module` as
+   `ESP32-S3-MINI-1`. Hand-soldering is doable with flux and a fine tip; the
+   center pad needs a hot plate or hot air.
+8. Keep the test points from section 4.5 and add one on 3V3 and EN.
+9. Order the N8 variant (8 MB flash, no PSRAM); N4R2 or others need a different
+   partition table.
+
 ## 2. DemoFinal's auto-stop compares grams to kilograms
 
 `totalGrams >= (targetkg + currentkg) - 50` mixes units: `targetkg` is 3.0,
