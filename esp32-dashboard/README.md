@@ -38,30 +38,39 @@ After that esptool resets the board itself.
 
 ## Pages
 
+Layout follows the team sketch: three tabs, NOW / PAST FLIGHTS / ANALYTICS.
+
 | path            | what |
 |-----------------|------|
-| `/`             | live panel (iframe refreshing every 1 s), target entry, START, STOP |
+| `/`             | NOW: flight line, fuel requested, live density, gallons loaded, FlyPrecise difference (iframe refreshing every 1 s), load-a-flight form, START, STOP |
 | `/live`         | the refreshing panel itself |
-| `/history`      | last 50 sessions, newest first |
+| `/past`         | last 50 flights, newest first (`/history` is an alias) |
+| `/analytics`    | totals, average density, per-flight difference chart |
 | `/slip?id=N`    | printable fuel slip |
-| `/export.csv`   | download `sessions.csv` |
-| `/settings`     | clock, units, calibration coefficients, AP password |
+| `/export.csv`   | download the flights CSV |
+| `/settings`     | clock, units, planning density, calibration coefficients, AP password |
 | `/advanced`     | manual pump / valve toggles (not in the nav) |
 | `/debug`        | plain-text state dump for bench work |
+
+**FlyPrecise difference** = fuel requested x (1 - measured density / planning
+density). Planning density defaults to 6.7 lbs/gallon (Settings). Negative means
+the aircraft carries less fuel than a density-assumed load for the same requested
+mass. With the sketch's numbers (245,850 lbs requested, 6.91 measured) it gives
+-7,712 lbs.
 
 ## Storage
 
 `sessions.csv` (append-only, rotates to `sessions.1.csv` past ~300 KB):
 
 ```
-id,epoch,target_g,delivered_ml,delivered_g,density_gml,reason
-1,1762112345,3000,2940,2396,0.815,TARGET
+id,epoch,flight,origin,dest,aircraft,target_g,delivered_ml,delivered_g,density_gml,reason
+1,1762112345,XX1234,LAX,SIN,B787-900,3000,2940,2396,0.815,TARGET
 ```
 
 `epoch` is 0 if the clock had not been set when the fill ended. Times are stored
 as the wall-clock value entered on the Settings page (no time zone).
 
-`settings.json`: `{"next_id":2,"units_mass":"kg","units_vol":"L","cal_a":1,"cal_b":0,"ap_pass":""}`
+`settings.json`: `{"next_id":2,"units_mass":"lb","units_vol":"gal","nominal_lbgal":6.7,"cal_a":1,"cal_b":0,"ap_pass":""}`
 
 ## Layout
 

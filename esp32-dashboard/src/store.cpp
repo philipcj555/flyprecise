@@ -10,35 +10,49 @@ namespace {
   bool clockIsSet = false;
 
   bool parseRow(char* line, SessionRow& r) {
-    // id,epoch,target_g,delivered_ml,delivered_g,density_gml,reason
-    char* f[8];
+    // id,epoch,flight,origin,dest,aircraft,target_g,delivered_ml,delivered_g,density_gml,reason
+    char* f[12];
     size_t n = 0;
     char* p = line;
-    while (p && n < 8) {
+    while (p && n < 12) {
       f[n++] = p;
       char* c = strchr(p, ',');
       if (!c) break;
       *c = '\0';
       p = c + 1;
     }
-    if (n < 7 || !isdigit((unsigned char)f[0][0])) return false;   // header or junk
+    if (n < 11 || !isdigit((unsigned char)f[0][0])) return false;   // header or junk
     r.id = strtoul(f[0], nullptr, 10);
     r.epoch = strtoul(f[1], nullptr, 10);
-    r.targetG = strtoul(f[2], nullptr, 10);
-    r.ml = strtoul(f[3], nullptr, 10);
-    r.g = strtoul(f[4], nullptr, 10);
-    r.densGml = atof(f[5]);
-    strlcpy(r.reason, f[6], sizeof(r.reason));
+    strlcpy(r.flight.flight, f[2], sizeof(r.flight.flight));
+    strlcpy(r.flight.origin, f[3], sizeof(r.flight.origin));
+    strlcpy(r.flight.dest, f[4], sizeof(r.flight.dest));
+    strlcpy(r.flight.aircraft, f[5], sizeof(r.flight.aircraft));
+    r.targetG = strtoul(f[6], nullptr, 10);
+    r.ml = strtoul(f[7], nullptr, 10);
+    r.g = strtoul(f[8], nullptr, 10);
+    r.densGml = atof(f[9]);
+    strlcpy(r.reason, f[10], sizeof(r.reason));
     size_t rl = strlen(r.reason);
     while (rl && (r.reason[rl - 1] == '\r' || r.reason[rl - 1] == '\n')) r.reason[--rl] = '\0';
     return true;
   }
 
   void ensureSessionsFile() {
-    if (!LittleFS.exists(SESSIONS_PATH)) {
-      File f = LittleFS.open(SESSIONS_PATH, "w");
-      if (f) { f.print(SESSIONS_CSV_HEADER); f.close(); }
+    // If a file from an older firmware (different columns) is present, keep it aside.
+    if (LittleFS.exists(SESSIONS_PATH)) {
+      File f = LittleFS.open(SESSIONS_PATH, "r");
+      String hdr = f ? f.readStringUntil('\n') : String();
+      if (f) f.close();
+      hdr.trim();
+      String want = SESSIONS_CSV_HEADER; want.trim();
+      if (hdr == want) return;
+      Serial.println("[store] sessions.csv has an old layout, moving to sessions.old.csv");
+      LittleFS.remove("/sessions.old.csv");
+      LittleFS.rename(SESSIONS_PATH, "/sessions.old.csv");
     }
+    File f = LittleFS.open(SESSIONS_PATH, "w");
+    if (f) { f.print(SESSIONS_CSV_HEADER); f.close(); }
   }
 
   bool loadSettings() {
@@ -49,8 +63,9 @@ namespace {
     f.close();
     if (err) { Serial.printf("[store] settings.json parse error: %s\n", err.c_str()); return false; }
     cfg.nextId = doc["next_id"] | 1;
-    strlcpy(cfg.unitsMass, doc["units_mass"] | "kg", sizeof(cfg.unitsMass));
-    strlcpy(cfg.unitsVol,  doc["units_vol"]  | "L",  sizeof(cfg.unitsVol));
+    strlcpy(cfg.unitsMass, doc["units_mass"] | "lb", sizeof(cfg.unitsMass));
+    strlcpy(cfg.unitsVol,  doc["units_vol"]  | "gal", sizeof(cfg.unitsVol));
+    cfg.nominalLbGal = doc["nominal_lbgal"] | 6.7f;
     cfg.calA = doc["cal_a"] | 1.0f;
     cfg.calB = doc["cal_b"] | 0.0f;
     strlcpy(cfg.apPass, doc["ap_pass"] | "", sizeof(cfg.apPass));
@@ -62,7 +77,7 @@ namespace {
   void forEachRow(F fn) {
     File f = LittleFS.open(SESSIONS_PATH, "r");
     if (!f) return;
-    char line[128];
+    char line[160];
     while (f.available()) {
       size_t n = f.readBytesUntil('\n', line, sizeof(line) - 1);
       line[n] = '\0';
@@ -91,6 +106,7 @@ bool Store::saveSettings() {
   doc["next_id"] = cfg.nextId;
   doc["units_mass"] = cfg.unitsMass;
   doc["units_vol"] = cfg.unitsVol;
+  doc["nominal_lbgal"] = cfg.nominalLbGal;
   doc["cal_a"] = cfg.calA;
   doc["cal_b"] = cfg.calB;
   doc["ap_pass"] = cfg.apPass;
@@ -109,7 +125,7 @@ size_t Store::sessionsFileSize() {
   return s;
 }
 
-uint32_t Store::appendSession(const StopEvent& ev) {
+uint32_t Store::appendSession(const StopEvent& ev, const FlightInfo& fi) {
   if (!fsOk) return 0;
   if (sessionsFileSize() > SESSIONS_MAX_BYTES) {
     LittleFS.remove(SESSIONS_ROTATED);
@@ -121,10 +137,11 @@ uint32_t Store::appendSession(const StopEvent& ev) {
 
   File f = LittleFS.open(SESSIONS_PATH, "a");
   if (!f) return 0;
-  char line[128];
-  snprintf(line, sizeof(line), "%lu,%lu,%lu,%lu,%lu,%.3f,%s\n",
-           (unsigned long)id, (unsigned long)nowEpoch(), (unsigned long)ev.targetG,
-           (unsigned long)ev.ml, (unsigned long)ev.g, ev.densGml, ev.reason);
+  char line[160];
+  snprintf(line, sizeof(line), "%lu,%lu,%s,%s,%s,%s,%lu,%lu,%lu,%.3f,%s\n",
+           (unsigned long)id, (unsigned long)nowEpoch(),
+           fi.flight, fi.origin, fi.dest, fi.aircraft,
+           (unsigned long)ev.targetG, (unsigned long)ev.ml, (unsigned long)ev.g, ev.densGml, ev.reason);
   f.print(line);
   f.close();
   Serial.printf("[store] session %lu: %s", (unsigned long)id, line);
@@ -149,6 +166,36 @@ size_t Store::recentSessions(SessionRow* out, size_t max) {
   }
   for (size_t i = 0; i < count; i++) out[i] = tmp[i];
   return count;
+}
+
+bool Store::lastSession(SessionRow& out) {
+  bool found = false;
+  forEachRow([&](const SessionRow& r) { out = r; found = true; return true; });
+  return found;
+}
+
+void Store::computeStats(Stats& s) {
+  s = Stats();
+  forEachRow([&](const SessionRow& r) {
+    s.flights++;
+    s.totalMl += r.ml;
+    s.totalG += r.g;
+    float d;
+    if (differenceLb(r.targetG, r.densGml, d)) {
+      s.flightsWithDensity++;
+      s.totalDiffLb += d;
+      s.sumDensGml += r.densGml;
+    }
+    return true;
+  });
+}
+
+bool Store::differenceLb(uint32_t targetG, float densGml, float& outLb) {
+  if (densGml <= 0 || cfg.nominalLbGal <= 0) return false;
+  float actualLbGal = densGml * GML_TO_LBGAL;
+  float requestedLb = targetG * G_TO_LB;
+  outLb = requestedLb * (1.0f - actualLbGal / cfg.nominalLbGal);
+  return true;
 }
 
 bool Store::findSession(uint32_t id, SessionRow& out) {

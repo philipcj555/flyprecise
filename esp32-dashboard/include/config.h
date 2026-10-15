@@ -25,10 +25,11 @@
 #define SESSIONS_PATH      "/sessions.csv"
 #define SESSIONS_ROTATED   "/sessions.1.csv"
 #define SETTINGS_PATH      "/settings.json"
-#define SESSIONS_CSV_HEADER "id,epoch,target_g,delivered_ml,delivered_g,density_gml,reason\n"
+#define SESSIONS_CSV_HEADER "id,epoch,flight,origin,dest,aircraft,target_g,delivered_ml,delivered_g,density_gml,reason\n"
 // ~60 bytes/row * 5000 rows. When exceeded, sessions.csv rotates to sessions.1.csv.
 #define SESSIONS_MAX_BYTES (300UL * 1024UL)
 #define HISTORY_ROWS       50
+#define ANALYTICS_BARS     12   // flights shown in the per-flight chart
 
 // Target validation (kg)
 #define TARGET_MIN_KG      0.1f

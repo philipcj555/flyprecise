@@ -12,7 +12,7 @@
 static DNSServer dns;
 
 static void onUnoStop(const StopEvent& ev) {
-  uint32_t id = Store::appendSession(ev);
+  uint32_t id = Store::appendSession(ev, Web::currentFlight());
   Web::noteSessionSaved(id);
 }
 
