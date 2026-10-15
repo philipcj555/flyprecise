@@ -19,11 +19,21 @@ then only pull the line LOW, the pull-up or the 16U2 provides HIGH, and
 uploads never fight the ESP32. Keep the cuttable jumper in series as the plan
 already says.
 
-## 1b. Path B chosen (bare module on the shield): what the shield must carry (PCB)
+## 1b. Both paths on one shield (PCB)
 
-Decision Oct 15: the ESP32-S3-MINI-1-N8 goes directly on the shield (plan
-section 4.1 path B). Firmware is unchanged (the DevKitM-1 is the same module),
-but the shield now has to provide everything the DevKit did:
+Decision Oct 15: lay out the shield for **both** options and populate one.
+A 2x(1x22) socket for the ESP32-S3-DevKitM-1 (path A) sits next to the bare
+ESP32-S3-MINI-1-N8 footprint (path B). Only one is fitted per board. The DevKit
+socket gets the rig working early; the bare module is the cleaner final build.
+Both share the same UNO_TX / UNO_RX / 5V / GND nets, so nothing else changes.
+
+For the DevKit socket: the DevKitM-1 is 2 rows of 22 pins at 2.54 mm pitch,
+rows 22.86 mm apart (check the Espressif drawing before finalising). Only
+5V, GND, GPIO17, GPIO18 need to be routed; the rest can be no-connect. Its own
+regulator handles 3.3 V, so the LDO below is only populated for the bare module.
+
+Firmware is identical for both (the DevKitM-1 carries the same module).
+For the bare module the shield has to provide everything the DevKit did:
 
 1. **3.3 V regulator** from the 5 V rail, rated 600 mA or more with headroom
    for Wi-Fi bursts: AP2112K-3.3 or AP7361-33 preferred (low dropout), AMS1117-3.3
