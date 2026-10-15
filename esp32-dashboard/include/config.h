@@ -12,7 +12,8 @@
 #define AP_NETMASK         IPAddress(255, 255, 255, 0)
 #define MDNS_NAME          "flyprecise"    // http://flyprecise.local
 
-// UART1 to the Uno. ESP32-S3 pin matrix: any GPIO works; 17/18 are free on the DevKitM-1.
+// UART1 to the Uno. ESP32-S3 pin matrix: any GPIO works; 17/18 are not strapping pins.
+// Path B: module is on the shield; these are the module pads to route.
 #define UNO_UART_BAUD      9600
 #define UNO_UART_TX_PIN    17
 #define UNO_UART_RX_PIN    18
