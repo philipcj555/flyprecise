@@ -4,6 +4,9 @@ Wi-Fi front end for the FlyPrecise rig. The ESP32 hosts an access point and a
 pure HTML + CSS dashboard (no JavaScript). The Uno keeps all control logic.
 
 Spec: `../docs/FLYPRECISE_DASHBOARD_PLAN.md`. Protocol: `../docs/serial_protocol.md`.
+Page markup and stylesheet: `../frontend/` (the design source; `src/web.cpp`
+renders the same markup with live values, and `data/style.css` is a copy of
+`frontend/style.css`).
 
 ## Build / flash
 
