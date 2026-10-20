@@ -22,6 +22,8 @@ already says.
 ## 1b. Both paths on one shield (PCB)
 
 Decision Oct 15: lay out the shield for **both** options and populate one.
+(`PCB/PCB_connections.txt`, added Oct 15, already lists "ESP32 - header sockets",
+which is the DevKit socket half of this.)
 A 2x(1x22) socket for the ESP32-S3-DevKitM-1 (path A) sits next to the bare
 ESP32-S3-MINI-1-N8 footprint (path B). Only one is fitted per board. The DevKit
 socket gets the rig working early; the bare module is the cleaner final build.

@@ -438,7 +438,7 @@ namespace {
            "<label for=\"nd\">lbs per gallon</label><input id=\"nd\" name=\"nd\" type=\"number\" step=\"0.01\" min=\"5\" max=\"9\" value=\"");
     p += String(s.nominalLbGal, 2);
     p += F("\"></fieldset>");
-    p += F("<fieldset><legend>Density calibration</legend><p class=\"hint\">corrected = a &times; raw + b. Sent to the Uno as <code>C&lt;a&gt;,&lt;b&gt;</code>. Leave at 1 / 0 until the Oct 19 calibration is done.</p>"
+    p += F("<fieldset><legend>Density calibration</legend><p class=\"hint\">corrected = a &times; raw + b. Sent to the Uno as <code>C&lt;a&gt;,&lt;b&gt;</code>. Leave at 1 / 0 until the density calibration is done.</p>"
            "<label for=\"ca\">a</label><input id=\"ca\" name=\"ca\" type=\"number\" step=\"any\" value=\"");
     p += String(s.calA, 5);
     p += F("\"><label for=\"cb\">b</label><input id=\"cb\" name=\"cb\" type=\"number\" step=\"any\" value=\"");

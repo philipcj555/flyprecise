@@ -82,4 +82,5 @@ src/uno_link.*        $T/$E parser, command sender, FAKE_UNO simulator
 src/store.*           LittleFS: sessions.csv, settings.json, clock
 src/web.*             routes and server-side HTML
 data/                 style.css, manifest.json, icon.svg (embedded at build)
+uno/Demo_v3.ino       reference Uno sketch that speaks the protocol (DemoFinal + $T/$E)
 ```

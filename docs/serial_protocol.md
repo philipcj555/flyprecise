@@ -4,7 +4,7 @@
 Arduino serial monitor doubles as the debugger. The ESP32 ignores any line that
 does not start with `$`. The Uno ignores any command byte it does not know.
 
-Implemented in `Demo/Demo_v3/Demo_v3.ino` (Uno) and `esp32-dashboard/src/uno_link.cpp` (ESP32).
+Implemented in `esp32-dashboard/uno/Demo_v3.ino` (reference Uno sketch) and `esp32-dashboard/src/uno_link.cpp` (ESP32).
 
 ## Uno -> ESP32 telemetry, every 500 ms
 

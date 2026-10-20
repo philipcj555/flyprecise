@@ -1,4 +1,7 @@
 // FlyPrecise Uno firmware v3 = DemoFinal.ino + ESP32 dashboard link.
+// Reference sketch the dashboard was built against. Lives with the front end so
+// it does not replace anything in Demo/; whoever owns the Uno firmware can merge
+// the protocol parts (sendTelemetry / sendEvent* / handleCommand) into their sketch.
 // Protocol: docs/serial_protocol.md. Plan: docs/FLYPRECISE_DASHBOARD_PLAN.md (section 5.4).
 //
 // Changes from DemoFinal.ino:
