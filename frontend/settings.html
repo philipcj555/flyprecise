@@ -1,1 +1,99 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FlyPrecise</title><link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon.svg"><meta name="theme-color" content="#0b0d10"><link rel="stylesheet" href="style.css"></head><body><header><a class="brand" href="index.html">Fly<span>Precise</span></a><nav class="tabs"><a href="index.html">NOW</a><a href="past.html">PAST FLIGHTS</a><a href="analytics.html">ANALYTICS</a></nav><a class="gear" href="settings.html" title="Settings">&#9881;</a></header><main><h1>Settings</h1><form method="post" action="/settings" class="settings"><fieldset><legend>Clock</legend><p class="hint">The ESP32 has no battery clock. Set this once per power-up so records get a date.</p><label for="dt">Current date &amp; time</label><input id="dt" name="dt" type="datetime-local" value="2026-11-02T14:05"></fieldset><fieldset><legend>Units</legend><div class="opts"><label class="opt"><input type="radio" name="um" value="lb" checked> lbs</label><label class="opt"><input type="radio" name="um" value="kg"> kg</label></div><div class="opts"><label class="opt"><input type="radio" name="uv" value="gal" checked> gallons (density in lbs/gallon)</label><label class="opt"><input type="radio" name="uv" value="L"> litres (density in g/mL)</label></div><p class="hint">Slips always show both.</p></fieldset><fieldset><legend>Planning density</legend><p class="hint">The density a conventional load assumes. The FlyPrecise difference is measured against it. Jet A is usually planned at 6.7 lbs/gallon.</p><label for="nd">lbs per gallon</label><input id="nd" name="nd" type="number" step="0.01" min="5" max="9" value="6.70"></fieldset><fieldset><legend>Density calibration</legend><p class="hint">corrected = a &times; raw + b. Sent to the Uno as <code>C&lt;a&gt;,&lt;b&gt;</code>. Leave at 1 / 0 until the density calibration is done.</p><label for="ca">a</label><input id="ca" name="ca" type="number" step="any" value="1.00000"><label for="cb">b</label><input id="cb" name="cb" type="number" step="any" value="0.00000"></fieldset><fieldset><legend>Wi-Fi</legend><label for="ap">Hotspot password (8+ chars, applies after reboot; blank = keep)</label><input id="ap" name="ap" type="text" minlength="8" maxlength="32" autocomplete="off"></fieldset><button class="btn start" type="submit">Save</button></form><p class="hint">Storage: OK, flights file 1240 bytes. <a href="/export.csv">Export</a> &nbsp; <a href="advanced.html">Advanced</a> &nbsp; <a href="/debug">Debug</a></p></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>FlyPrecise</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+    <meta name="theme-color" content="#0b0d10" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="index.html">
+        Fly
+        <span>Precise</span>
+      </a>
+      <nav class="tabs">
+        <a href="index.html">NOW</a>
+        <a href="past.html">PAST FLIGHTS</a>
+        <a href="analytics.html">ANALYTICS</a>
+      </nav>
+      <a class="gear" href="settings.html" title="Settings">&#9881;</a>
+    </header>
+    <main>
+      <h1>Settings</h1>
+      <form method="post" action="/settings" class="settings">
+        <fieldset>
+          <legend>Clock</legend>
+          <p class="hint">
+            The ESP32 has no battery clock. Set this once per power-up so records get a date.
+          </p>
+          <label for="dt">Current date &amp; time</label>
+          <input id="dt" name="dt" type="datetime-local" value="2026-11-02T14:05" />
+        </fieldset>
+        <fieldset>
+          <legend>Units</legend>
+          <div class="opts">
+            <label class="opt">
+              <input type="radio" name="um" value="lb" checked />
+              lbs
+            </label>
+            <label class="opt">
+              <input type="radio" name="um" value="kg" />
+              kg
+            </label>
+          </div>
+          <div class="opts">
+            <label class="opt">
+              <input type="radio" name="uv" value="gal" checked />
+              gallons (density in lbs/gallon)
+            </label>
+            <label class="opt">
+              <input type="radio" name="uv" value="L" />
+              litres (density in g/mL)
+            </label>
+          </div>
+          <p class="hint">Slips always show both.</p>
+        </fieldset>
+        <fieldset>
+          <legend>Planning density</legend>
+          <p class="hint">
+            The density a conventional load assumes. The FlyPrecise difference is measured against it. Jet A
+            is usually planned at 6.7 lbs/gallon.
+          </p>
+          <label for="nd">lbs per gallon</label>
+          <input id="nd" name="nd" type="number" step="0.01" min="5" max="9" value="6.70" />
+        </fieldset>
+        <fieldset>
+          <legend>Density calibration</legend>
+          <p class="hint">
+            corrected = a &times; raw + b. Sent to the Uno as
+            <code>C&lt;a&gt;,&lt;b&gt;</code>
+            . Leave at 1 / 0 until the density calibration is done.
+          </p>
+          <label for="ca">a</label>
+          <input id="ca" name="ca" type="number" step="any" value="1.00000" />
+          <label for="cb">b</label>
+          <input id="cb" name="cb" type="number" step="any" value="0.00000" />
+        </fieldset>
+        <fieldset>
+          <legend>Wi-Fi</legend>
+          <label for="ap">Hotspot password (8+ chars, applies after reboot; blank = keep)</label>
+          <input id="ap" name="ap" type="text" minlength="8" maxlength="32" autocomplete="off" />
+        </fieldset>
+        <button class="btn start" type="submit">Save</button>
+      </form>
+      <p class="hint">
+        Storage: OK, flights file 1240 bytes.
+        <a href="/export.csv">Export</a>
+        &nbsp;
+        <a href="advanced.html">Advanced</a>
+        &nbsp;
+        <a href="/debug">Debug</a>
+      </p>
+    </main>
+  </body>
+</html>

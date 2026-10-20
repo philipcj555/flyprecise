@@ -1,1 +1,115 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FlyPrecise</title><link rel="manifest" href="manifest.json"><link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icon.svg"><meta name="theme-color" content="#0b0d10"><link rel="stylesheet" href="style.css"></head><body><header><a class="brand" href="index.html">Fly<span>Precise</span></a><nav class="tabs"><a href="index.html">NOW</a><a href="past.html">PAST FLIGHTS</a><a href="analytics.html" class="on">ANALYTICS</a></nav><a class="gear" href="settings.html" title="Settings">&#9881;</a></header><main><h1>Analytics</h1><div class="tiles"><div class="tile"><div class="tv">3 <small></small></div><div class="tl">Flights fuelled</div></div><div class="tile"><div class="tv">306,180 <small>lbs</small></div><div class="tl">Fuel loaded</div></div><div class="tile"><div class="tv">-7,922 <small>lbs</small></div><div class="tl">FlyPrecise difference, total</div></div><div class="tile"><div class="tv">6.77 <small>lbs/gallon</small></div><div class="tl">Average density</div></div></div><p class="hint">Difference = fuel requested &times; (1 &minus; measured density / planning density of 6.70 lbs/gallon). Negative means less fuel carried than a density-assumed load for the same requested mass.</p><h2>Difference per flight</h2><div class="chart"><div class="cr"><span class="cl">XX2210</span><span class="cb"><i class="pos" style="width:2%"></i></span><span class="cv">166</span></div><div class="cr"><span class="cl">XX0088</span><span class="cb"><i class="neg" style="width:5%"></i></span><span class="cv">-376</span></div><div class="cr"><span class="cl">XX1234</span><span class="cb"><i class="neg" style="width:100%"></i></span><span class="cv">-7,712</span></div></div><h2>Density per flight</h2><div class="tablewrap"><table><thead><tr><th>Flight</th><th>Density</th><th>Loaded</th><th>Requested</th></tr></thead><tbody><tr><td>XX1234</td><td>6.91</td><td>35,578</td><td>245,850</td></tr><tr><td>XX0088</td><td>6.76</td><td>6,211</td><td>42,000</td></tr><tr><td>XX2210</td><td>6.64</td><td>2,786</td><td>18,500</td></tr></tbody></table></div></main></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>FlyPrecise</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+    <meta name="theme-color" content="#0b0d10" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="index.html">
+        Fly
+        <span>Precise</span>
+      </a>
+      <nav class="tabs">
+        <a href="index.html">NOW</a>
+        <a href="past.html">PAST FLIGHTS</a>
+        <a href="analytics.html" class="on">ANALYTICS</a>
+      </nav>
+      <a class="gear" href="settings.html" title="Settings">&#9881;</a>
+    </header>
+    <main>
+      <h1>Analytics</h1>
+      <div class="tiles">
+        <div class="tile">
+          <div class="tv">
+            3
+            <small></small>
+          </div>
+          <div class="tl">Flights fuelled</div>
+        </div>
+        <div class="tile">
+          <div class="tv">
+            306,180
+            <small>lbs</small>
+          </div>
+          <div class="tl">Fuel loaded</div>
+        </div>
+        <div class="tile">
+          <div class="tv">
+            -7,922
+            <small>lbs</small>
+          </div>
+          <div class="tl">FlyPrecise difference, total</div>
+        </div>
+        <div class="tile">
+          <div class="tv">
+            6.77
+            <small>lbs/gallon</small>
+          </div>
+          <div class="tl">Average density</div>
+        </div>
+      </div>
+      <p class="hint">
+        Difference = fuel requested &times; (1 &minus; measured density / planning density of 6.70
+        lbs/gallon). Negative means less fuel carried than a density-assumed load for the same requested mass.
+      </p>
+      <h2>Difference per flight</h2>
+      <div class="chart">
+        <div class="cr">
+          <span class="cl">XX2210</span>
+          <span class="cb"><i class="pos" style="width: 2%"></i></span>
+          <span class="cv">166</span>
+        </div>
+        <div class="cr">
+          <span class="cl">XX0088</span>
+          <span class="cb"><i class="neg" style="width: 5%"></i></span>
+          <span class="cv">-376</span>
+        </div>
+        <div class="cr">
+          <span class="cl">XX1234</span>
+          <span class="cb"><i class="neg" style="width: 100%"></i></span>
+          <span class="cv">-7,712</span>
+        </div>
+      </div>
+      <h2>Density per flight</h2>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Flight</th>
+              <th>Density</th>
+              <th>Loaded</th>
+              <th>Requested</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>XX1234</td>
+              <td>6.91</td>
+              <td>35,578</td>
+              <td>245,850</td>
+            </tr>
+            <tr>
+              <td>XX0088</td>
+              <td>6.76</td>
+              <td>6,211</td>
+              <td>42,000</td>
+            </tr>
+            <tr>
+              <td>XX2210</td>
+              <td>6.64</td>
+              <td>2,786</td>
+              <td>18,500</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </body>
+</html>
